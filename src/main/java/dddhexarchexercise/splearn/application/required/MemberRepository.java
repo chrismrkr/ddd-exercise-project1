@@ -13,4 +13,6 @@ public interface MemberRepository extends Repository<Member, Long> {
     Member save(Member member); // 수정 및 등록할 때 사용하는 메소드
 
     Optional<Member> findByEmail(Email email);
+
+    Optional<Member> findById(Long memberId);
 }

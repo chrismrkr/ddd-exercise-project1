@@ -6,7 +6,7 @@ public class MemberFixture {
         return createMemberRegisterRequest("kangok@splearn.app");
     }
     public static MemberRegisterRequest createMemberRegisterRequest(String mail) {
-        return new MemberRegisterRequest(mail, "kangok", "secret");
+        return new MemberRegisterRequest(mail, "kangok", "secret012345");
     }
 
     public static PasswordEncoder createPasswordEncoder() {

@@ -1,6 +1,6 @@
 package dddhexarchexercise.splearn.application.provided;
 
-import dddhexarchexercise.splearn.application.MemberService;
+import dddhexarchexercise.splearn.application.MemberModifyService;
 import dddhexarchexercise.splearn.application.required.EmailSender;
 import dddhexarchexercise.splearn.application.required.MemberRepository;
 import dddhexarchexercise.splearn.domain.Email;
@@ -23,8 +23,8 @@ import static org.junit.jupiter.api.Assertions.*;
 class MemberRegistrationManualTest {
     @Test
     void registerTestStub() {
-        MemberRegistration memberRegistration = new MemberService(
-                new MemberRepositoryStub(), new EmailSenderStub(), MemberFixture.createPasswordEncoder()
+        MemberRegistration memberRegistration = new MemberModifyService(
+                new MemberFinderStub(), new MemberRepositoryStub(), new EmailSenderStub(), MemberFixture.createPasswordEncoder()
         );
 
         Member member = memberRegistration.register(MemberFixture.createMemberRegisterRequest());
@@ -36,8 +36,8 @@ class MemberRegistrationManualTest {
     @Test
     void registerTestMock() {
         EmailSenderMock emailSenderMock = new EmailSenderMock();
-        MemberRegistration memberRegistration = new MemberService(
-                new MemberRepositoryStub(), emailSenderMock, MemberFixture.createPasswordEncoder()
+        MemberRegistration memberRegistration = new MemberModifyService(
+                new MemberFinderStub(), new MemberRepositoryStub(), emailSenderMock, MemberFixture.createPasswordEncoder()
         );
 
         Member member = memberRegistration.register(MemberFixture.createMemberRegisterRequest());
@@ -50,8 +50,8 @@ class MemberRegistrationManualTest {
     @Test
     void registerTestMockito() {
         EmailSender emailSenderMock = Mockito.mock(EmailSender.class);
-        MemberRegistration memberRegistration = new MemberService(
-                new MemberRepositoryStub(), emailSenderMock, MemberFixture.createPasswordEncoder()
+        MemberRegistration memberRegistration = new MemberModifyService(
+                new MemberFinderStub(), new MemberRepositoryStub(), emailSenderMock, MemberFixture.createPasswordEncoder()
         );
 
         Member member = memberRegistration.register(MemberFixture.createMemberRegisterRequest());
@@ -62,6 +62,13 @@ class MemberRegistrationManualTest {
         Mockito.verify(emailSenderMock).send(ArgumentMatchers.eq(member.getEmail()), ArgumentMatchers.any(), ArgumentMatchers.any());
     }
 
+    static class MemberFinderStub implements MemberFinder {
+
+        @Override
+        public Member find(Long memberId) {
+            return null;
+        }
+    }
 
     static class MemberRepositoryStub implements MemberRepository {
         @Override
@@ -72,6 +79,11 @@ class MemberRegistrationManualTest {
 
         @Override
         public Optional<Member> findByEmail(Email email) {
+            return Optional.empty();
+        }
+
+        @Override
+        public Optional<Member> findById(Long memberId) {
             return Optional.empty();
         }
     }
